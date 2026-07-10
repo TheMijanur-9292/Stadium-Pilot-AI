@@ -1,0 +1,114 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model User {
+  id                      String         @id @default(uuid())
+  fullName                String
+  email                   String         @unique
+  password                String
+  role                    Role           @default(FAN)
+  preferredLanguage       String         @default("English")
+  accessibilityPreference String         @default("None")
+  avatar                  String?
+  createdAt               DateTime       @default(now())
+  updatedAt               DateTime       @updatedAt
+  conversations           Conversation[]
+}
+
+model Conversation {
+  id        String    @id @default(uuid())
+  userId    String
+  title     String
+  createdAt DateTime  @default(now())
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  messages  Message[]
+}
+
+model Message {
+  id             String       @id @default(uuid())
+  conversationId String
+  role           String
+  content        String
+  timestamp      DateTime     @default(now())
+  conversation   Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+}
+
+model Venue {
+  id                 String              @id @default(uuid())
+  stadiumName        String
+  city               String
+  country            String
+  capacity           Int
+  crowdZones         CrowdZone[]
+  emergencyPoints    EmergencyPoint[]
+  facilities         Facility[]
+  foodVendors        FoodVendor[]
+  transportationHubs TransportationHub[]
+}
+
+model Facility {
+  id       String @id @default(uuid())
+  venueId  String
+  type     String
+  name     String
+  floor    String
+  location String
+  venue    Venue  @relation(fields: [venueId], references: [id], onDelete: Cascade)
+}
+
+model FoodVendor {
+  id         String  @id @default(uuid())
+  venueId    String
+  name       String
+  category   String
+  priceRange String
+  halal      Boolean @default(false)
+  vegetarian Boolean @default(false)
+  vegan      Boolean @default(false)
+  venue      Venue   @relation(fields: [venueId], references: [id], onDelete: Cascade)
+}
+
+model EmergencyPoint {
+  id       String @id @default(uuid())
+  venueId  String
+  type     String
+  location String
+  venue    Venue  @relation(fields: [venueId], references: [id], onDelete: Cascade)
+}
+
+model TransportationHub {
+  id       String @id @default(uuid())
+  venueId  String
+  type     String
+  location String
+  venue    Venue  @relation(fields: [venueId], references: [id], onDelete: Cascade)
+}
+
+model CrowdZone {
+  id         String @id @default(uuid())
+  venueId    String
+  section    String
+  crowdLevel String
+  venue      Venue  @relation(fields: [venueId], references: [id], onDelete: Cascade)
+}
+
+model Announcement {
+  id          String   @id @default(uuid())
+  title       String
+  description String
+  priority    String
+  createdAt   DateTime @default(now())
+}
+
+enum Role {
+  FAN
+  VOLUNTEER
+  VENUE_STAFF
+  ORGANIZER
+  ADMIN
+}
