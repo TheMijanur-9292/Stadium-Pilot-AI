@@ -50,4 +50,4 @@ async function bootstrap() {
     `📄 API Swagger documentation at http://localhost:${port}/api/docs`,
   );
 }
-bootstrap();
+void bootstrap();

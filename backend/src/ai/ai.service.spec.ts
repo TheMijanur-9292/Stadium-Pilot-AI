@@ -32,7 +32,6 @@ jest.mock('@google/generative-ai', () => {
 
 describe('AIService', () => {
   let service: AIService;
-  let prisma: PrismaService;
 
   const mockUser = {
     id: 'user-1',
@@ -66,7 +65,6 @@ describe('AIService', () => {
     }).compile();
 
     service = module.get<AIService>(AIService);
-    prisma = module.get<PrismaService>(PrismaService);
   });
 
   afterEach(() => {

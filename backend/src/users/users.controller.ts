@@ -58,7 +58,8 @@ export class UsersController {
       fullName,
       role: role || Role.FAN,
     });
-    const { password: _, ...result } = user;
+    const { password: _password, ...result } = user;
+    void _password;
     return result;
   }
 
@@ -93,7 +94,8 @@ export class UsersController {
       where: { id },
       data: dataToUpdate,
     });
-    const { password: _, ...result } = updatedUser;
+    const { password: _password, ...result } = updatedUser;
+    void _password;
     return result;
   }
 

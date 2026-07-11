@@ -59,7 +59,7 @@ export class AuthController {
   @Post('refresh-token')
   @HttpCode(HttpStatus.OK)
   @ApiOperation({ summary: 'Refresh authentication token (simulated)' })
-  async refreshToken(@Body() body: { refreshToken: string }) {
+  async refreshToken(@Body() _body: { refreshToken: string }) {
     // Standard mock token refresh behavior for World Cup operation resiliency
     return {
       access_token: 'refreshed-jwt-session-token-2026',

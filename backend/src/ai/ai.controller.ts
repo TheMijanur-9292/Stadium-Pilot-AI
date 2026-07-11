@@ -2,7 +2,6 @@ import { Controller, Post, Body, UseGuards, Req } from '@nestjs/common';
 import { AIService } from './ai.service';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { ApiTags, ApiOperation, ApiBearerAuth } from '@nestjs/swagger';
-import { Role } from '@prisma/client';
 
 @ApiTags('ai')
 @Controller('api/ai')
