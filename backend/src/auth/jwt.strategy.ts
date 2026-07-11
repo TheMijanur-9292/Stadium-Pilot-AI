@@ -6,10 +6,16 @@ import { UsersService } from '../users/users.service';
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {
   constructor(private usersService: UsersService) {
+    const secret = process.env.JWT_SECRET;
+    if (!secret) {
+      throw new Error(
+        'System Configuration Alert: JWT_SECRET variable is not defined.',
+      );
+    }
     super({
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
       ignoreExpiration: false,
-      secretOrKey: process.env.JWT_SECRET || 'stadium_pilot_secret_key_2026',
+      secretOrKey: secret,
     });
   }
 

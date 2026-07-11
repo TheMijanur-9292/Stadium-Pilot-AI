@@ -11,9 +11,19 @@ import { RolesGuard } from './roles.guard';
   imports: [
     UsersModule,
     PassportModule,
-    JwtModule.register({
-      secret: process.env.JWT_SECRET || 'stadium_pilot_secret_key_2026',
-      signOptions: { expiresIn: '1d' },
+    JwtModule.registerAsync({
+      useFactory: () => {
+        const secret = process.env.JWT_SECRET;
+        if (!secret) {
+          throw new Error(
+            'System Configuration Alert: JWT_SECRET variable is not defined in current env.',
+          );
+        }
+        return {
+          secret,
+          signOptions: { expiresIn: '1d' },
+        };
+      },
     }),
   ],
   providers: [AuthService, JwtStrategy, RolesGuard],
