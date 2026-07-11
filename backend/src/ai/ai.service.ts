@@ -25,10 +25,33 @@ export class AIService {
       },
     });
 
-    // 1. Fetch User details
-    const dbUser = await this.prisma.user.findUnique({
-      where: { id: user.id },
-    });
+    // 1. Fetch User, Venue, and Announcements context in parallel
+    const [dbUser, targetVenue, announcements] = await Promise.all([
+      this.prisma.user.findUnique({
+        where: { id: user.id },
+      }),
+      venueId
+        ? this.prisma.venue.findUnique({
+            where: { id: venueId },
+            include: {
+              facilities: true,
+              foodVendors: true,
+              emergencyPoints: true,
+              transportationHubs: true,
+              crowdZones: true,
+            },
+          })
+        : this.prisma.venue.findFirst({
+            include: {
+              facilities: true,
+              foodVendors: true,
+              emergencyPoints: true,
+              transportationHubs: true,
+              crowdZones: true,
+            },
+          }),
+      this.prisma.announcement.findMany(),
+    ]);
 
     const role = dbUser?.role || user.role;
     const fullName = dbUser?.fullName || user.fullName;
@@ -36,34 +59,6 @@ export class AIService {
       clientMemory?.language || dbUser?.preferredLanguage || 'English';
     const accessibilityPreference =
       clientMemory?.accessibility || dbUser?.accessibilityPreference || 'None';
-
-    // 2. Fetch Stadium / Venue Context
-    let targetVenue;
-    if (venueId) {
-      targetVenue = await this.prisma.venue.findUnique({
-        where: { id: venueId },
-        include: {
-          facilities: true,
-          foodVendors: true,
-          emergencyPoints: true,
-          transportationHubs: true,
-          crowdZones: true,
-        },
-      });
-    } else {
-      const venues = await this.prisma.venue.findMany({
-        include: {
-          facilities: true,
-          foodVendors: true,
-          emergencyPoints: true,
-          transportationHubs: true,
-          crowdZones: true,
-        },
-      });
-      targetVenue = venues[0];
-    }
-
-    const announcements = await this.prisma.announcement.findMany();
 
     // 3. Format Context Strings for Prompt Builder
     const venueContext = targetVenue

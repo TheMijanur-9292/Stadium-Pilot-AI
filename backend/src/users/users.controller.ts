@@ -52,12 +52,14 @@ export class UsersController {
   async create(@Body() body: any) {
     const { email, password, fullName, role } = body;
     const passwordHash = await bcrypt.hash(password || 'Password@123', 10);
-    return this.usersService.create({
+    const user = await this.usersService.create({
       email,
       passwordHash,
       fullName,
       role: role || Role.FAN,
     });
+    const { password: _, ...result } = user;
+    return result;
   }
 
   @Put(':id')
@@ -87,10 +89,12 @@ export class UsersController {
       dataToUpdate.password = await bcrypt.hash(password, 10);
     }
 
-    return this.prisma.user.update({
+    const updatedUser = await this.prisma.user.update({
       where: { id },
       data: dataToUpdate,
     });
+    const { password: _, ...result } = updatedUser;
+    return result;
   }
 
   @Delete(':id')

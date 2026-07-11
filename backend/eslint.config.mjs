@@ -35,6 +35,7 @@ export default tseslint.config(
       '@typescript-eslint/no-unsafe-call': 'off',
       '@typescript-eslint/require-await': 'off',
       '@typescript-eslint/no-unused-vars': 'warn',
+      '@typescript-eslint/unbound-method': 'off',
       'no-empty': 'off',
       "prettier/prettier": ["error", { endOfLine: "auto" }],
     },

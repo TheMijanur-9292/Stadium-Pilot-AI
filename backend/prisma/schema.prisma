@@ -27,6 +27,8 @@ model Conversation {
   createdAt DateTime  @default(now())
   user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
   messages  Message[]
+
+  @@index([userId])
 }
 
 model Message {
@@ -36,6 +38,8 @@ model Message {
   content        String
   timestamp      DateTime     @default(now())
   conversation   Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+
+  @@index([conversationId])
 }
 
 model Venue {
@@ -59,6 +63,8 @@ model Facility {
   floor    String
   location String
   venue    Venue  @relation(fields: [venueId], references: [id], onDelete: Cascade)
+
+  @@index([venueId])
 }
 
 model FoodVendor {
@@ -71,6 +77,8 @@ model FoodVendor {
   vegetarian Boolean @default(false)
   vegan      Boolean @default(false)
   venue      Venue   @relation(fields: [venueId], references: [id], onDelete: Cascade)
+
+  @@index([venueId])
 }
 
 model EmergencyPoint {
@@ -79,6 +87,8 @@ model EmergencyPoint {
   type     String
   location String
   venue    Venue  @relation(fields: [venueId], references: [id], onDelete: Cascade)
+
+  @@index([venueId])
 }
 
 model TransportationHub {
@@ -87,6 +97,8 @@ model TransportationHub {
   type     String
   location String
   venue    Venue  @relation(fields: [venueId], references: [id], onDelete: Cascade)
+
+  @@index([venueId])
 }
 
 model CrowdZone {
@@ -95,6 +107,8 @@ model CrowdZone {
   section    String
   crowdLevel String
   venue      Venue  @relation(fields: [venueId], references: [id], onDelete: Cascade)
+
+  @@index([venueId])
 }
 
 model Announcement {
