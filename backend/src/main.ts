@@ -14,7 +14,11 @@ async function bootstrap() {
 
   // Enable CORS
   app.enableCors({
-    origin: ['http://localhost:3027', 'https://stadium-pilot-ai-mu.vercel.app'],
+    origin: [
+      'http://localhost:3027',
+      'http://localhost:3056',
+      'https://stadium-pilot-ai-mu.vercel.app',
+    ],
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
     credentials: true,
   });
