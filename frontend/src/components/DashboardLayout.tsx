@@ -25,6 +25,7 @@ import {
   Calendar,
   UsersRound,
   Trophy,
+  Home,
 } from 'lucide-react';
 import {
   Chip,
@@ -295,6 +296,28 @@ export default function DashboardLayout({ children }: { children: ReactNode }) {
             <Chip color={getRoleColor(user.role)} variant="soft" className="hidden sm:inline-flex capitalize">
               {user.role.toLowerCase().replace('_', ' ')} Mode
             </Chip>
+
+            {/* Home Page Button */}
+            <Button
+              isIconOnly
+              variant="ghost"
+              onPress={() => router.push('/')}
+              className="rounded-full w-9 h-9 min-w-9"
+              aria-label="Go to Home"
+            >
+              <Home size={16} />
+            </Button>
+
+            {/* Light/Dark Mode Button */}
+            <Button
+              isIconOnly
+              variant="ghost"
+              onPress={toggleTheme}
+              className="rounded-full w-9 h-9 min-w-9"
+              aria-label="Toggle Theme"
+            >
+              {theme === 'light' ? <Moon size={16} /> : <Sun size={16} />}
+            </Button>
 
             <div className="relative">
               <button
