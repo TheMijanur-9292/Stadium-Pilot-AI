@@ -65,7 +65,7 @@ describe('UsersController', () => {
         role: 'FAN',
       });
       expect(result.id).toBe(mockUser.id);
-      expect(result.password).toBeUndefined();
+      expect((result as any).password).toBeUndefined();
     });
   });
 
