@@ -6,15 +6,15 @@ export class DashboardService {
   constructor(private prisma: PrismaService) {}
 
   async getFanSummary() {
-    const venues = await this.prisma.venue.findMany({ take: 3 });
-    const foodVendors = await this.prisma.foodVendor.findMany({ take: 3 });
-    const announcements = await this.prisma.announcement.findMany({
-      orderBy: { createdAt: 'desc' },
-      take: 3,
-    });
-    const transportHubs = await this.prisma.transportationHub.findMany({
-      take: 3,
-    });
+    const [venues, foodVendors, announcements, transportHubs] = await Promise.all([
+      this.prisma.venue.findMany({ take: 3 }),
+      this.prisma.foodVendor.findMany({ take: 3 }),
+      this.prisma.announcement.findMany({
+        orderBy: { createdAt: 'desc' },
+        take: 3,
+      }),
+      this.prisma.transportationHub.findMany({ take: 3 }),
+    ]);
 
     return {
       venues,
@@ -25,11 +25,13 @@ export class DashboardService {
   }
 
   async getVolunteerSummary() {
-    const facilities = await this.prisma.facility.findMany({ take: 3 });
-    const announcements = await this.prisma.announcement.findMany({
-      orderBy: { createdAt: 'desc' },
-      take: 3,
-    });
+    const [facilities, announcements] = await Promise.all([
+      this.prisma.facility.findMany({ take: 3 }),
+      this.prisma.announcement.findMany({
+        orderBy: { createdAt: 'desc' },
+        take: 3,
+      }),
+    ]);
 
     // Simulating volunteer shift assignments matching the volunteer persona
     return {
@@ -44,11 +46,13 @@ export class DashboardService {
   }
 
   async getOrganizerSummary() {
-    const totalUsers = await this.prisma.user.count();
-    const totalVenues = await this.prisma.venue.count();
-    const emergencyPoints = await this.prisma.emergencyPoint.findMany();
-    const crowdZones = await this.prisma.crowdZone.findMany();
-    const announcements = await this.prisma.announcement.findMany();
+    const [totalUsers, totalVenues, emergencyPoints, crowdZones, announcements] = await Promise.all([
+      this.prisma.user.count(),
+      this.prisma.venue.count(),
+      this.prisma.emergencyPoint.findMany(),
+      this.prisma.crowdZone.findMany(),
+      this.prisma.announcement.findMany(),
+    ]);
 
     return {
       totalUsers,
