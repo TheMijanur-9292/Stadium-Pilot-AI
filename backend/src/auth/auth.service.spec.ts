@@ -164,7 +164,9 @@ describe('AuthService', () => {
 
     it('should throw BadRequestException if user does not exist', async () => {
       mockUsersService.findByEmail.mockResolvedValue(null);
-      await expect(service.forgotPassword('notfound@example.com')).rejects.toThrow(BadRequestException);
+      await expect(
+        service.forgotPassword('notfound@example.com'),
+      ).rejects.toThrow(BadRequestException);
     });
   });
 
@@ -174,13 +176,18 @@ describe('AuthService', () => {
       mockUsersService.updatePassword = jest.fn().mockResolvedValue(true);
       (bcrypt.hash as jest.Mock).mockResolvedValue('hashed-password-new');
 
-      const result = await service.resetPassword('test@example.com', 'newpass123');
+      const result = await service.resetPassword(
+        'test@example.com',
+        'newpass123',
+      );
       expect(result.message).toBe('Password has been reset successfully');
     });
 
     it('should throw BadRequestException if user does not exist', async () => {
       mockUsersService.findByEmail.mockResolvedValue(null);
-      await expect(service.resetPassword('notfound@example.com', 'pass')).rejects.toThrow(BadRequestException);
+      await expect(
+        service.resetPassword('notfound@example.com', 'pass'),
+      ).rejects.toThrow(BadRequestException);
     });
   });
 });

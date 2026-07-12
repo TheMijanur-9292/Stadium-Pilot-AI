@@ -6,15 +6,16 @@ export class DashboardService {
   constructor(private prisma: PrismaService) {}
 
   async getFanSummary() {
-    const [venues, foodVendors, announcements, transportHubs] = await Promise.all([
-      this.prisma.venue.findMany({ take: 3 }),
-      this.prisma.foodVendor.findMany({ take: 3 }),
-      this.prisma.announcement.findMany({
-        orderBy: { createdAt: 'desc' },
-        take: 3,
-      }),
-      this.prisma.transportationHub.findMany({ take: 3 }),
-    ]);
+    const [venues, foodVendors, announcements, transportHubs] =
+      await Promise.all([
+        this.prisma.venue.findMany({ take: 3 }),
+        this.prisma.foodVendor.findMany({ take: 3 }),
+        this.prisma.announcement.findMany({
+          orderBy: { createdAt: 'desc' },
+          take: 3,
+        }),
+        this.prisma.transportationHub.findMany({ take: 3 }),
+      ]);
 
     return {
       venues,
@@ -46,7 +47,13 @@ export class DashboardService {
   }
 
   async getOrganizerSummary() {
-    const [totalUsers, totalVenues, emergencyPoints, crowdZones, announcements] = await Promise.all([
+    const [
+      totalUsers,
+      totalVenues,
+      emergencyPoints,
+      crowdZones,
+      announcements,
+    ] = await Promise.all([
       this.prisma.user.count(),
       this.prisma.venue.count(),
       this.prisma.emergencyPoint.findMany(),

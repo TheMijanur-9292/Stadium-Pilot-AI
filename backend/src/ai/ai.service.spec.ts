@@ -4,15 +4,16 @@ import { PrismaService } from '../prisma.service';
 
 const mockGenerateContent = jest.fn().mockResolvedValue({
   response: {
-    text: () => `\`\`\`json\n${JSON.stringify({
-      title: 'Stadium Pilot AI Help',
-      summary: 'Processed query summary response',
-      recommendations: ['Check gate coordinates'],
-      warnings: [],
-      estimatedTime: 'N/A',
-      nextSteps: ['Check announcements']
-    })}\n\`\`\``
-  }
+    text: () =>
+      `\`\`\`json\n${JSON.stringify({
+        title: 'Stadium Pilot AI Help',
+        summary: 'Processed query summary response',
+        recommendations: ['Check gate coordinates'],
+        warnings: [],
+        estimatedTime: 'N/A',
+        nextSteps: ['Check announcements'],
+      })}\n\`\`\``,
+  },
 });
 
 const mockGetGenerativeModel = jest.fn().mockReturnValue({
@@ -82,18 +83,43 @@ describe('AIService', () => {
         city: 'Lusail',
         country: 'Qatar',
         capacity: 80000,
-        facilities: [{ name: 'Restroom', type: 'RESTROOM', floor: '1', location: 'Gate A' }],
-        foodVendors: [{ name: 'Burgers', category: 'Fast Food', priceRange: '$$', halal: true, vegetarian: false, vegan: false }],
+        facilities: [
+          {
+            name: 'Restroom',
+            type: 'RESTROOM',
+            floor: '1',
+            location: 'Gate A',
+          },
+        ],
+        foodVendors: [
+          {
+            name: 'Burgers',
+            category: 'Fast Food',
+            priceRange: '$$',
+            halal: true,
+            vegetarian: false,
+            vegan: false,
+          },
+        ],
         emergencyPoints: [{ type: 'MEDICAL', location: 'Section 104' }],
         transportationHubs: [{ type: 'METRO', location: 'East Gate' }],
         crowdZones: [{ section: 'Gate A', crowdLevel: 'HIGH' }],
       });
-      mockPrisma.announcement.findMany.mockResolvedValue([{ title: 'Gate B closed', description: 'Due to congestion', priority: 'HIGH' }]);
+      mockPrisma.announcement.findMany.mockResolvedValue([
+        {
+          title: 'Gate B closed',
+          description: 'Due to congestion',
+          priority: 'HIGH',
+        },
+      ]);
 
       const result = await service.getResponse(
         'status of gate A',
         { id: 'user-1', role: 'ADMIN' },
-        [{ sender: 'user', text: 'hi' }, { sender: 'bot', text: 'hello' }]
+        [
+          { sender: 'user', text: 'hi' },
+          { sender: 'bot', text: 'hello' },
+        ],
       );
 
       expect(result).toBeDefined();
