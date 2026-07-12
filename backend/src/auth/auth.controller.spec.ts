@@ -32,8 +32,8 @@ describe('AuthController', () => {
         id: '1',
         email: 'test@example.com',
       });
-      const req = { body: { email: 'test@example.com', password: 'password' } };
-      const result = await controller.login(req);
+      const loginDto = { email: 'test@example.com', password: 'password' };
+      const result = await controller.login(loginDto);
       expect(result.access_token).toBe('token');
     });
   });
